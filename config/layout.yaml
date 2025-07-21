@@ -1,0 +1,6 @@
+# layout.yaml
+zones:
+  - {id: A, type: storage, capacity: 100, x: 2, y: 1}
+  - {id: B, type: storage, capacity: 120, x: 6, y: 1}
+  - {id: DOCK_IN,  type: dock_in,  capacity: 2, x: 0, y: 4}
+  - {id: DOCK_OUT, type: dock_out, capacity: 2, x: 8, y: 4}

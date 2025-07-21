@@ -1,0 +1,56 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Logs and runtime files
+*.log
+*.pid
+*.sqlite3
+*.db
+
+# Test & coverage output
+.coverage
+htmlcov/
+.tox/
+.nox/
+.pytest_cache/
+.cache/
+
+# Editor folders
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Jupyter notebooks
+.ipynb_checkpoints/
+
+# MyPy / Pyright
+.mypy_cache/
+.pyright/
+
+# Generated media & data
+*.gif
+*.mp4
+*.png
+*.jpg
+*.jpeg
+*.zip
+
+# Plotly HTML exports (optional)
+sim_view.html

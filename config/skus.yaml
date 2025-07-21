@@ -1,0 +1,17 @@
+# skus.yaml
+skus:
+  - id: S_PEPSI_05
+    desc: "Pepsi 0.5L PET Blue"
+    zone: A
+    base_pick_sec: 10
+    initial_qty: 500
+  - id: S_COLA_15
+    desc: "Coke 1.5L"
+    zone: A
+    base_pick_sec: 12
+    initial_qty: 300
+  - id: S_SNACK_X
+    desc: "Snack X 80g"
+    zone: B
+    base_pick_sec: 8
+    initial_qty: 800
