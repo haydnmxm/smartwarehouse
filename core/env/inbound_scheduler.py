@@ -19,15 +19,31 @@ def _poisson(rng: random.Random, lam: float) -> int:
 
 
 def _weighted_choice(rng: random.Random, mix):
-    """Выбор SKU из client.sku_mix с учётом веса."""
-    total = sum(item["weight"] for item in mix)
+    """Выбор SKU из client.sku_mix с учётом веса.
+
+    ``mix`` может быть списком словарей ``{"sku": id, "weight": w}`` или
+    списком кортежей/списков ``(sku_id, weight)``.
+    """
+    if not mix:
+        return None
+
+    first = mix[0]
+    if isinstance(first, dict):
+        get_sku = lambda item: item["sku"]
+        get_weight = lambda item: item["weight"]
+    else:
+        get_sku = lambda item: item[0]
+        get_weight = lambda item: item[1]
+
+    total = sum(get_weight(item) for item in mix)
+
     r = rng.uniform(0, total)
-    upto = 0
+    upto = 0.0
     for item in mix:
-        upto += item["weight"]
+        upto += get_weight(item)
         if upto >= r:
-            return item["sku"]
-    return mix[-1]["sku"]           # fallback (почти не случается)
+            return get_sku(item)
+    return get_sku(mix[-1])           # fallback (почти не случается)
 # ---------------------------------------------------------------------------
 
 

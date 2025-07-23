@@ -1,2 +1,2 @@
 sim_time,order_lines_done,dock_util,avg_lead_time_min,patch
-3600,292,0.0,3.9,"{""waves.size"": 50, ""workers.pickers"": 5, ""workers.speed_cells_per_sec"": 0.5}"
+3600,288,0.0,22.5,"{""optimizer.period_min"": 10, ""orders.line_pick_time_base"": 5.0, ""orders.lines_lambda_per_min"": 15.0, ""orders.zone_multipliers.A"": 1.0, ""orders.zone_multipliers.B"": 1.2, ""orders.zone_multipliers.C"": 1.5, ""waves.build_timeout_seconds"": 120, ""waves.size"": 50, ""workers.pickers"": 10, ""workers.speed_cells_per_sec"": 0.5}"
