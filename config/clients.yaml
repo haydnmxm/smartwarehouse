@@ -2,41 +2,27 @@
 clients:
   - id: C1
     name: DailyShop
+
     inbound:
       pattern: interval
-      base_interval_min: 5   # каждые 12 часов
-      jitter_min: -60
-      jitter_max: 60
-      batch_mean_lines: 100   # сколько разных SKU в поставке (Пуассон)
-      sku_qty_mean: 50        # среднее количество каждой позиции
+      # Поставки каждые 1 минуту
+      base_interval_min: 1
+      jitter_min:         0
+      jitter_max:         0
+      # Каждая поставка ≈50 линий → 5 рабочих не простаивают
+      batch_mean_lines:   50
+      sku_qty_mean:       1
+
     outbound:
       pattern: interval
-      base_interval_min: 1440   # раз в сутки
-      jitter_min: -120
-      jitter_max: 120
-      lines_mean: 80            # среднее линий (Пуассон)
+      base_interval_min: 0.6667   # 40 сек
+      jitter_min: 0
+      jitter_max: 0
+      batch_mean_lines: 50         # вместо lines_mean
+      lines_mean: 20
+      sku_qty_mean: 1              # добавляем, иначе 0
+
     sku_mix:
       - {sku: S_PEPSI_05, weight: 5}
       - {sku: S_COLA_15,  weight: 3}
       - {sku: S_SNACK_X,  weight: 2}
-
-  - id: C2
-    name: TwiceWeek
-    inbound:
-      pattern: interval
-      base_interval_min: 5   # каждые 12 часов
-      jitter_min: -60
-      jitter_max: 60
-      batch_mean_lines: 100   # сколько разных SKU в поставке (Пуассон)
-      sku_qty_mean: 50        # среднее количество каждой позиции
-    outbound:
-      pattern: weekly
-      days: [1,4]               # 0=Monday (задание соглашения)
-      time_minute_of_day: 600   # 10:00
-      jitter_min: -30
-      jitter_max: 30
-      lines_mean: 120
-    sku_mix:
-      - {sku: S_PEPSI_05, weight: 10}
-      - {sku: S_COLA_15,  weight: 5}
-      - {sku: S_SNACK_X,  weight: 1}

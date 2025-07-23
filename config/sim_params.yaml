@@ -1,75 +1,51 @@
+# sim_params.yaml
 # ================== SIMULATION CONFIG ==================
-# Все времена в секундах сим-времени.
+# Все времена в секундах сим‑времени.
 
 files:
   layout: config/layout.yaml
-  skus: config/skus.yaml
+  skus:   config/skus.yaml
   clients: config/clients.yaml
 
 time:
-  # Смена целиком (можно переопределять через аргумент --shift-seconds)
-  shift_seconds: 28800          # 8 часов
-  # Базовый шаг тика, который читает SimulationEngine (simulation_engine.py)
-  base_tick_seconds: 1
+  # Длительность симуляции: 1 час
+  shift_seconds:       3600
+  # Шаг тика в секундах
+  base_tick_seconds:   1
 
 # Генерация заказных линий (order_generation.py)
 orders:
-  # Среднее число ЛИНИЙ (не заказов) в МИНУТУ (λ Пуассона)
-  lines_lambda_per_min: 20
-  # Базовое время (сек) на выполнение одной линии (до множителей)
-  line_pick_time_base: 12
-  # Множители времени по зонам (если зона не указана — 1.0)
+  lines_lambda_per_min: 45     # ≈45 линий в минуту
+  line_pick_time_base: 12      # базовое время на линию
   zone_multipliers:
     A: 1.0
     B: 1.1
-    C: 1.2
-  # На сколько минут вперёд ставим дедлайн каждой линии (created_time + offset)
-  deadline_offset_min: 120
+  deadline_min: 60
 
-# Волны (wave_manager.py)
-waves:
-  size: 120                    # Целевой размер волны (сколько линий набираем)
-  build_timeout_seconds: 300   # Если за 5 минут не набралась — активируем что есть
-
-# Dispatcher / назначение (dispatcher_heuristic.py и LiveConfig)
 dispatcher:
-  max_assign_per_step: 10          # Сколько линий максимум назначать за один тик
-  look_ahead_lines_per_worker: 1   # (пока не используется в heuristic, но для LiveConfig)
+  max_assign_per_step:          8
+  look_ahead_lines_per_worker:  1
 
-# Работники (state_builder.py)
 workers:
-  pickers: 5                       # Количество сборщиков
-  speed_cells_per_sec: 1.5
+  pickers:            5         # 5 сборщиков
+  speed_cells_per_sec: 1.0
 
-# Метрики (metrics.py)
 metrics:
-  sample_interval_seconds: 60      # Раз в минуту писать snapshot метрик
-
-# emergency:
-#   enabled: true
-#   large_order_qty_threshold: 5
-#   # expedite_deficit_threshold: 3      # если нехватка больше порога – экспедитим
-#   # expedite_travel_sec: 300            # сколько “едет” ускоренная поставка
-#   # expedite_max_batch: 120    
+  sample_interval_seconds: 60
 
 inventory:
-  initial_stock: 0          # общий старт (игнорируем initial_qty в SKUs)
-  allow_negative: false
+  initial_stock:      0
+  allow_negative:     false
 
 dump:
-  snap_every_sec: 1        # писать кадр раз в 1 сек
-  keep_snapshots_days: 30   # хранить ~30 суток
+  snap_every_sec:     1
+  keep_snapshots_days: 30
 
+# Оптимайзер (не трогаем)
 optimizer:
-  period_min: 1            # частота вызова LLM (сим‑мин)
-  model: gpt-4o-mini
-  # max_tokens: 512
-  # temperature: 0.8
-  kpi_targets:              # ориентиры для LLM
-    mean_cycle_s: 300
-    dock_queue: 4
-    otif: 0.95
-  # patch_limits:             # «запретные» зоны — LLM не залезет
-  #   max_workers_delta: 2
-  #   tune_speed_pct: 20
-  #   allow_layout_change: false
+  period_min:         123123
+
+# --- Вот добавленный блок waves, без него код падает на KeyError ---
+waves:
+  # Время таймаута при сборке волны (сек)
+  build_timeout_seconds: 300

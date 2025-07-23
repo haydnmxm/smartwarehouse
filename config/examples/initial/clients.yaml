@@ -1,0 +1,21 @@
+# clients.yaml
+clients:
+  - id: C1
+    name: DailyShop
+    inbound:
+      pattern: interval
+      base_interval_min: 6   # каждые 12 часов
+      jitter_min: -60
+      jitter_max: 60
+      batch_mean_lines: 100   # сколько разных SKU в поставке (Пуассон)
+      sku_qty_mean: 50        # среднее количество каждой позиции
+    outbound:
+      pattern: interval
+      base_interval_min: 3   # 
+      jitter_min: -120
+      jitter_max: 120
+      lines_mean: 80            # среднее линий (Пуассон)
+    sku_mix:
+      - {sku: S_PEPSI_05, weight: 5}
+      - {sku: S_COLA_15,  weight: 3}
+      - {sku: S_SNACK_X,  weight: 2}

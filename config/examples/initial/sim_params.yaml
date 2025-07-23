@@ -1,0 +1,61 @@
+# ================== SIMULATION CONFIG ==================
+# Все времена в секундах сим-времени.
+
+files:
+  layout: config/layout.yaml
+  skus: config/skus.yaml
+  clients: config/clients.yaml
+
+time:
+  # Смена целиком (можно переопределять через аргумент --shift-seconds)
+  shift_seconds: 3600                # 8 часов
+  # Базовый шаг тика, который читает SimulationEngine (simulation_engine.py)
+  base_tick_seconds: 1
+
+# Генерация заказных линий (order_generation.py)
+orders:
+  # Среднее число ЛИНИЙ (не заказов) в МИНУТУ (λ Пуассона)
+  lines_lambda_per_min: 80
+  # Базовое время (сек) на выполнение одной линии (до множителей)
+  line_pick_time_base: 10
+  # Множители времени по зонам (если зона не указана — 1.0)
+  zone_multipliers:
+    A: 1.0
+    B: 1.1
+    C: 1.2
+  # На сколько минут вперёд ставим дедлайн каждой линии (created_time + offset)
+  deadline_offset_min: 60
+
+# Волны (wave_manager.py)
+waves:
+  size: 120                      # Целевой размер волны (сколько линий набираем)
+  build_timeout_seconds: 300      # Если за 5 минут не набралась — активируем что есть
+
+# Dispatcher / назначение (dispatcher_heuristic.py и LiveConfig)
+dispatcher:
+  max_assign_per_step: 8           # Сколько линий максимум назначать за один тик
+  look_ahead_lines_per_worker: 1   # (пока не используется в heuristic, но для LiveConfig)
+
+# Работники (state_builder.py)
+workers:
+  pickers: 5                       # Количество сборщиков
+  speed_cells_per_sec: 1.0
+
+# Метрики (metrics.py)
+metrics:
+  sample_interval_seconds: 1800      # Раз в минуту писать snapshot метрик  
+
+inventory:
+  initial_stock: 0          # общий старт (игнорируем initial_qty в SKUs)
+  allow_negative: false
+
+dump:
+  snap_every_sec: 5        # писать кадр раз в 1 сек
+  keep_snapshots_days: 30   # хранить ~30 суток
+
+optimizer:
+  period_min: 60 # каждые X сим‑минут вызывать LLM
+  kpi_targets:
+    order_lines_done: 400
+    dock_util: 0.80
+    avg_lead_time_min: 180

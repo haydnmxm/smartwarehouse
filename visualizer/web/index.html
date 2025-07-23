@@ -7,9 +7,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div id="app">
+  <nav id="tabs">
+    <button id="tab-sim" class="tab-btn active">Simulation</button>
+    <button id="tab-report" class="tab-btn">Optimizer Report</button>
+  </nav>
+  <div id="sim-view">
 
     <!-- LEFT PANE -->
     <section id="visual">
@@ -63,6 +68,11 @@
         <div><span class="lbl" title="Active waves">Waves</span><span id="metric-waves">0</span></div>
         <div><span class="lbl" title="Building-wave size">Build wave</span><span id="metric-build">0</span></div>
     </aside>
+  </div>
+  <div id="report-view" style="display:none; padding:20px;">
+    <div id="report"></div>
+    <canvas id="chart-lines" height="160"></canvas>
+    <canvas id="chart-util" height="160"></canvas>
   </div>
 
   <script src="script.js"></script>

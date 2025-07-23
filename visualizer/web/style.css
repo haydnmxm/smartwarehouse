@@ -16,10 +16,18 @@
 
 html, body { height: 100%; margin: 0; font-family: "Inter", sans-serif; background: var(--bg); }
 
-#app {
+#tabs { position: fixed; display:flex; gap:4px; padding:8px; background:var(--panel); }
+.tab-btn { padding:6px 12px; border:1px solid var(--stroke); background:var(--panel); cursor:pointer; }
+.tab-btn.active { background:var(--primary); color:#fff; }
+
+#sim-view {
   display: flex;
   height: 100%;
 }
+
+#report-view { max-width: 900px; margin: 0 auto; }
+#report { margin-bottom: 16px; }
+
 
 /* === визуализация ============ */
 #visual {

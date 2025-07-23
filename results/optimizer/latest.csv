@@ -1,0 +1,2 @@
+sim_time,order_lines_done,dock_util,avg_lead_time_min,patch
+3600,292,0.0,3.9,"{""waves.size"": 50, ""workers.pickers"": 5, ""workers.speed_cells_per_sec"": 0.5}"

@@ -20,6 +20,8 @@ function load(){
 /* ---------- init ---------- */
 document.addEventListener('DOMContentLoaded',()=>{
   load();
+  $('tab-sim').addEventListener('click',()=>showTab('sim'));
+  $('tab-report').addEventListener('click',()=>{showTab('report'); loadReport();});
   $('play').addEventListener('click',togglePlay);
   $('prev').addEventListener('click',()=>step(-1));
   $('next').addEventListener('click',()=>step(1));
@@ -133,4 +135,34 @@ function drawFrame(i){
   $('metric-wait').textContent  = f.metrics.waiting_lines ?? '-';
   $('metric-waves').textContent = f.metrics.waves_active ?? '-';
   $('metric-build').textContent = f.metrics.building_wave_size ?? '-';
+}
+
+function showTab(name){
+  $('tab-sim').classList.toggle('active',name==='sim');
+  $('tab-report').classList.toggle('active',name==='report');
+  $('sim-view').style.display=name==='sim'?'flex':'none';
+  $('report-view').style.display=name==='report'?'block':'none';
+}
+
+let chartsLoaded=false;
+function loadReport(){
+  if(chartsLoaded) return;
+  chartsLoaded=true;
+  fetch('../results/optimizer/latest.md').then(r=>r.text()).then(t=>{
+    $('report').innerText=t;
+  });
+  fetch('../results/optimizer/latest.csv').then(r=>r.text()).then(t=>{
+    const rows=t.trim().split(/\n+/).slice(1).map(r=>r.split(','));
+    const times=rows.map(r=>r[0]);
+    const done=rows.map(r=>+r[1]);
+    const util=rows.map(r=>+r[2]);
+    new Chart(document.getElementById('chart-lines'),{
+      type:'line',
+      data:{labels:times,datasets:[{label:'Lines done',data:done,borderColor:'blue',fill:false}]},
+      options:{scales:{x:{display:true},y:{beginAtZero:true}}}
+    });
+    new Chart(document.getElementById('chart-util'),{
+      type:'line',data:{labels:times,datasets:[{label:'Dock util',data:util,borderColor:'green',fill:false}]},options:{scales:{x:{display:true},y:{beginAtZero:true, max:1}}}
+    });
+  });
 }
