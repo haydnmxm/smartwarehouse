@@ -5,7 +5,7 @@ from typing import Dict, List, Optional, Literal
 ZoneType = Literal["storage", "pack", "dock_in", "dock_out", "staging"]
 LineStatus = Literal["waiting", "assigned", "done", "canceled"]
 WaveStatus = Literal["building", "active", "complete"]
-WorkerState = Literal["idle", "working", "off", "charging"]
+WorkerState = Literal["idle", "moving", "picking", "off", "charging"]
 
 @dataclass
 class Zone:
@@ -17,6 +17,8 @@ class Zone:
     recovery_timer: int = 0
     x: int = 0
     y: int = 0
+    w: int = 1
+    h: int = 1
 
 @dataclass
 class Worker:
@@ -28,6 +30,10 @@ class Worker:
     progress_seconds: float = 0.0
     battery: int = 100
     speed_factor: float = 1.0
+    # --- новое ---
+    travel_remaining: float = 0.0
+    pick_remaining: float = 0.0
+    phase: Literal["travel", "pick"] | None = None
     current_zone_id: str = "DOCK_OUT"  # добавили для travel
 
 @dataclass
@@ -92,6 +98,16 @@ class SKU:
     initial_qty: int
     candidate_zones: list[str] | None = None
 
+# ----------------- док‑станции -----------------
+@dataclass
+class Dock:
+    id: str
+    kind: Literal["inbound", "outbound"]
+    service_seconds: int = 30*60
+    status: Literal["free", "busy"] = "free"
+    busy_until: int = 0
+    queue: list[str] = field(default_factory=list)
+
 @dataclass
 class InventoryRecord:
     sku_id: str
@@ -121,6 +137,7 @@ class WorldState:
     clients: Dict[str, Client]
     order_lines: Dict[str, OrderLine]
     waves: Dict[str, Wave]
+    docks: Dict[str, Dock]
     skus: Dict[str, SKU]
     inventory: Dict[str, InventoryRecord]          # можешь оставить (пока не активно)
     live_config: LiveConfig

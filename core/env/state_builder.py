@@ -3,7 +3,7 @@ import random
 from pathlib import Path
 import yaml
 from .models import (
-    Zone, Worker, Client, SKU, InventoryRecord,
+    Zone, Worker, Dock, Client, SKU, InventoryRecord,
     LiveConfig, MetricsAccumulator, WorldState
 )
 from .data_loader import load_layout, load_skus, load_clients
@@ -78,11 +78,17 @@ def build_initial_state(layout_cfg: dict, sim_cfg: dict, seed: int = 42) -> Worl
         cid: {sku_id: 0 for sku_id in skus.keys()} for cid in clients.keys()
     }
 
+    docks = {
+        "D_IN":  Dock(id="D_IN",  kind="inbound"),
+        "D_OUT": Dock(id="D_OUT", kind="outbound")
+    }
+
     # ------- финальный объект состояния -------
     state = WorldState(
         pending_optimizations=[],
         flags={},
         sim_time=0,
+        docks=docks,
         zones=zones,
         workers=workers,
         clients=clients,

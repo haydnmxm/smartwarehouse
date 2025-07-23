@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Warehouse Simulation Viewer</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+</head>
+<body>
+  <div id="app">
+
+    <!-- LEFT PANE -->
+    <section id="visual">
+      <div id="canvas-box"><canvas id="warehouse"></canvas></div>
+
+      <div id="controls">
+        <button id="play" class="btn">Play</button>
+        <button id="prev" class="btn icon">&#8592;</button>
+        <button id="next" class="btn icon">&#8594;</button>
+
+        <label>FPS <select id="fps"></select></label>
+        <input type="range" id="time-slider" min="0" value="0" step="1">
+      </div>
+
+      <ul id="legend">
+        <li><span class="dot worker"></span> Worker</li>
+        <li><span class="square dock-in"></span> Dock In</li>
+        <li><span class="square dock-out"></span> Dock Out</li>
+        <li><span class="square buffer"></span> Buffer</li>
+        <li>Storage: color ⇡ = fill level</li>
+        <li><span class="cross">✖</span> Incident</li>
+      </ul>
+    </section>
+
+    <!-- RIGHT PANE -->
+    <aside id="metrics">
+        <h3>Metrics</h3>
+
+        <!-- 1–3: Primary service KPIs -->
+        <div><span class="lbl" title="Orders delivered On-Time-In-Full">OTIF</span><span id="metric-otif">0</span></div>
+        <div><span class="lbl" title="Times a pick found the shelf empty">Stock-outs</span><span id="metric-stockouts">0</span></div>
+        <div><span class="lbl" title="Operational / safety incidents">Incidents</span><span id="metric-incidents">0</span></div>
+
+        <!-- 4–5: Resource & capacity utilization -->
+        <div><span class="lbl" title="Workers actively busy">Util</span><span id="metric-util">0</span></div>
+        <div><span class="lbl" title="Current warehouse load level">Load</span><span id="metric-load">0</span></div>
+
+        <hr>
+
+        <!-- 6–7: Dock status -->
+        <div><span class="lbl" title="Dock queue length (trucks)">Dock Q</span><span id="metric-dq">0</span></div>
+        <div><span class="lbl" title="Dock busy time left, sec">Dock busy</span><span id="metric-dbs">0</span></div>
+
+        <hr>
+
+        <!-- 8–13: Throughput & workflow -->
+        <div><span class="lbl" title="Throughput: lines per hour">LPH</span><span id="metric-th">0</span></div>
+        <div><span class="lbl" title="Completed order lines">Done</span><span id="metric-done">0</span></div>
+        <div><span class="lbl" title="Avg line latency, sec">Latency</span><span id="metric-lat">0</span></div>
+        <div><span class="lbl" title="Waiting order lines">Waiting</span><span id="metric-wait">0</span></div>
+        <div><span class="lbl" title="Active waves">Waves</span><span id="metric-waves">0</span></div>
+        <div><span class="lbl" title="Building-wave size">Build wave</span><span id="metric-build">0</span></div>
+    </aside>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

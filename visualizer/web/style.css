@@ -1,0 +1,129 @@
+:root {
+  --bg          : #f5f7fa;
+  --panel       : #ffffff;
+  --stroke      : #d1d9e6;
+  --primary     : #1976d2;
+  --primary-dark: #1158a7;
+
+  --storage : #e0f2ff;
+  --dock-in : #81d4fa;
+  --dock-out: #a5d6a7;
+  --buffer  : #ffe082;
+  --worker  : #ff5252;
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; margin: 0; font-family: "Inter", sans-serif; background: var(--bg); }
+
+#app {
+  display: flex;
+  height: 100%;
+}
+
+/* === визуализация ============ */
+#visual {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 24px;
+  gap: 12px;
+}
+
+#canvas-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0,0,0,.05);
+}
+
+#warehouse {
+  /* размеры задаёт JS, чтобы оставаться внутри box с отступами */
+}
+
+/* === панели ============ */
+#controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#controls label { font-size: 0.9rem; }
+
+#time-slider {
+  flex: 1;
+  accent-color: var(--primary);
+}
+
+.btn {
+  padding: 6px 12px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn.icon { font-size: 1rem; padding: 6px 10px; }
+
+.btn:hover  { background: var(--primary-dark); }
+.btn:active { transform: translateY(1px); }
+
+#fps {
+  padding: 4px 8px;
+  border: 1px solid var(--stroke);
+  border-radius: 4px;
+}
+
+/* === легенда ============ */
+#legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.85rem;
+  color: #333;
+}
+.dot     { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+.square  { width: 12px; height: 12px; display: inline-block; margin-right: 4px; }
+.cross   { color: red; font-weight: 600; margin-right: 4px; }
+
+.dot.worker  { background: var(--worker); }
+.square.dock-in  { background: var(--dock-in);  }
+.square.dock-out { background: var(--dock-out); }
+.square.buffer   { background: var(--buffer);   }
+
+/* === метрики ============ */
+#metrics {
+  width: 220px;
+  padding: 20px 18px;
+  background: var(--panel);
+  border-left: 1px solid var(--stroke);
+  box-shadow: -2px 0 4px rgba(0,0,0,.04);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+#metrics h3 { margin: 0 0 8px; font-weight: 600; font-size: 1.1rem; }
+#metrics div { font-size: 0.92rem; }
+
+#metrics div {
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+}
+.lbl { cursor: help; }
+
+#metrics hr {
+  width: 100%;
+  border: none;
+  border-top: 1px solid var(--stroke);
+  margin: 6px 0;
+}

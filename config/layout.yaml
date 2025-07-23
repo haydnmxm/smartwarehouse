@@ -1,6 +1,11 @@
 # layout.yaml
 zones:
-  - {id: A, type: storage, capacity: 100, x: 2, y: 1}
-  - {id: B, type: storage, capacity: 120, x: 6, y: 1}
-  - {id: DOCK_IN,  type: dock_in,  capacity: 2, x: 0, y: 4}
-  - {id: DOCK_OUT, type: dock_out, capacity: 2, x: 8, y: 4}
+  - {id: DOCK_IN,   type: dock_in,  capacity: 2,   x: 1, y: 7, w: 2, h: 1}
+  - {id: BUF_IN,    type: buffer,   capacity: 4,   x: 1, y: 6, w: 2, h: 1}
+  - {id: A1,        type: storage,  capacity: 100, x: 0, y: 3, w: 2, h: 2}
+  - {id: A2,        type: storage,  capacity: 100, x: 3, y: 3, w: 2, h: 2}
+  - {id: PASSAGE,   type: buffer,   capacity: 0,   x: 0, y: 2, w: 5, h: 1}
+  - {id: B1,        type: storage,  capacity: 120, x: 0, y: 0, w: 2, h: 2}
+  - {id: B2,        type: storage,  capacity: 120, x: 3, y: 0, w: 2, h: 2}
+  - {id: BUF_OUT,   type: buffer,   capacity: 4,   x: 6, y: 3, w: 2, h: 1}
+  - {id: DOCK_OUT,  type: dock_out, capacity: 2,   x: 6, y: 4, w: 2, h: 1}

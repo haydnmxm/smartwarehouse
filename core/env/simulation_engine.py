@@ -14,6 +14,24 @@ class SimulationEngine:
         self.tick_seconds = cfg["time"]["base_tick_seconds"]
         self.rng = random.Random(state.rng_seed)
         self.event_bus = EventBus()
+    
+    def _process_docks(self):
+        """
+        Берём/освобождаем док‑станции.
+        Для простоты здесь только задержка; фактическое перемещение товара
+        добавьте в finish_inbound() / finish_outbound() при необходимости.
+        """
+        for dock in self.state.docks.values():
+
+            # закончилась текущая операция
+            if dock.status == "busy" and self.state.sim_time >= dock.busy_until:
+                dock.status = "free"
+
+            # можно стартовать новую
+            if dock.status == "free" and dock.queue:
+                _ = dock.queue.pop(0)                            # берём первую фуру
+                dock.status = "busy"
+                dock.busy_until = self.state.sim_time + dock.service_seconds
 
     def step(self):
         if self.state.sim_time == 0:
@@ -37,11 +55,14 @@ class SimulationEngine:
         # 5. Применяем события -> создаём OrderLine
         self.event_bus.apply_cycle(self.state)
 
+        # ↓ новая обработка доков
+        self._process_docks()
+
         # 6. Waves / Dispatcher / Progress
         wave_manager.update_waves(self.state, self.cfg)
         dispatcher_heuristic.assign_lines(self.state)
         progress_model.advance_progress(self.state, self.tick_seconds)
-
+        
         # 7. Метрики
         metrics.collect_periodic(self.state, self.cfg)
 

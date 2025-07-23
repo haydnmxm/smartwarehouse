@@ -4,7 +4,7 @@ clients:
     name: DailyShop
     inbound:
       pattern: interval
-      base_interval_min: 720   # каждые 12 часов
+      base_interval_min: 5   # каждые 12 часов
       jitter_min: -60
       jitter_max: 60
       batch_mean_lines: 100   # сколько разных SKU в поставке (Пуассон)
@@ -24,7 +24,7 @@ clients:
     name: TwiceWeek
     inbound:
       pattern: interval
-      base_interval_min: 720   # каждые 12 часов
+      base_interval_min: 5   # каждые 12 часов
       jitter_min: -60
       jitter_max: 60
       batch_mean_lines: 100   # сколько разных SKU в поставке (Пуассон)

@@ -3,7 +3,10 @@ import argparse
 from .state_builder import load_yaml, build_initial_state
 from .simulation_engine import SimulationEngine
 from .metrics import flush_metrics
+from .frame_exporter import snapshot, dump_run
 import random
+
+frames = []
 
 def main():
     parser = argparse.ArgumentParser()
@@ -14,6 +17,10 @@ def main():
     args = parser.parse_args()
 
     sim_cfg = load_yaml(args.params)
+    dump_cfg   = sim_cfg.setdefault("dump", {"snap_every_sec": 10,
+                                         "keep_snapshots_days": 30})
+    snap_every = dump_cfg["snap_every_sec"]
+    max_frames = dump_cfg["keep_snapshots_days"] * 86400 // snap_every
     if args.shift_seconds:
         sim_cfg.setdefault("time", {})
         sim_cfg["time"]["shift_seconds"] = args.shift_seconds
@@ -28,6 +35,16 @@ def main():
 
     while state.sim_time < shift_end:
         engine.step()
+
+        if state.sim_time % snap_every == 0:           # реже снимаем кадры
+            frames.append(snapshot(state))
+            if len(frames) > max_frames:               # обрезаем «хвост»
+                frames.pop(0)
+
+    # --- выгрузка ---
+    from dataclasses import asdict
+    layout_dict = {"zones": [asdict(z) for z in state.zones.values()]}
+    dump_run(layout_dict, frames)            # <= сохраняем JSON
 
     flush_metrics(state)
     print("Simulation finished.")

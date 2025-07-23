@@ -39,18 +39,37 @@ dispatcher:
 # Работники (state_builder.py)
 workers:
   pickers: 5                       # Количество сборщиков
+  speed_cells_per_sec: 1.5
 
 # Метрики (metrics.py)
 metrics:
   sample_interval_seconds: 60      # Раз в минуту писать snapshot метрик
 
-emergency:
-  enabled: true
-  large_order_qty_threshold: 5
-  # expedite_deficit_threshold: 3      # если нехватка больше порога – экспедитим
-  # expedite_travel_sec: 300            # сколько “едет” ускоренная поставка
-  # expedite_max_batch: 120    
+# emergency:
+#   enabled: true
+#   large_order_qty_threshold: 5
+#   # expedite_deficit_threshold: 3      # если нехватка больше порога – экспедитим
+#   # expedite_travel_sec: 300            # сколько “едет” ускоренная поставка
+#   # expedite_max_batch: 120    
 
 inventory:
   initial_stock: 0          # общий старт (игнорируем initial_qty в SKUs)
   allow_negative: false
+
+dump:
+  snap_every_sec: 1        # писать кадр раз в 1 сек
+  keep_snapshots_days: 30   # хранить ~30 суток
+
+optimizer:
+  period_min: 60            # частота вызова LLM (сим‑мин)
+  model: gpt-4o-mini
+  max_tokens: 512
+  temperature: 0.4
+  kpi_targets:              # ориентиры для LLM
+    mean_cycle_s: 300
+    dock_queue: 4
+    otif: 0.95
+  patch_limits:             # «запретные» зоны — LLM не залезет
+    max_workers_delta: 2
+    tune_speed_pct: 20
+    allow_layout_change: false

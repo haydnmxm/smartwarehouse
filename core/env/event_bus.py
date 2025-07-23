@@ -4,6 +4,7 @@ from typing import List, Dict, Any
 import itertools, csv, os
 from .models import OrderLine
 from .travel import compute_travel_seconds
+from .putaway import choose_zone
 
 _event_id_counter = itertools.count(1)
 
@@ -143,8 +144,10 @@ class EventBus:
                 if served_qty > 0:
                     state.stock[client_id][sku_id] = stock - served_qty
 
-                    zone_id   = state.skus[sku_id].zone_id
-                    pick_base = state.skus[sku_id].base_pick_sec
+                    # ------ выбираем зону через put‑away ------
+                    sku_obj   = state.skus[sku_id]
+                    zone_id   = choose_zone(sku_obj, served_qty, state).id
+                    pick_base = sku_obj.base_pick_sec
                     pick_sec   = pick_base * served_qty
                     travel_sec = compute_travel_seconds(state, "DOCK_OUT", zone_id, per_cell=1.5)
                     work_total = pick_sec + travel_sec
@@ -178,6 +181,8 @@ class EventBus:
                         },
                         sim_time=state.sim_time
                     )
+                    # для метрик «stock‑outs»
+                    state.metrics.stockouts = getattr(state.metrics, "stockouts", 0) + rejected_qty
                     effects.append({"rejected_qty": rejected_qty})
                 return effects
 

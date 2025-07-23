@@ -13,6 +13,8 @@ def load_layout(path: str) -> dict[str, Zone]:
             capacity=z.get('capacity', 0),
             x=z.get('x', 0),
             y=z.get('y', 0),
+            w=z.get('w', 1),
+            h=z.get('h', 1),
         )
     return zones
 
