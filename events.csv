@@ -39883,3 +39883,6 @@ applied,3541,E2254,OutboundRejected,system,,,effects=0
 applied,3541,E2255,OutboundRejected,system,,,effects=0
 applied,3541,E2256,OutboundRejected,system,,,effects=0
 applied,3541,E2257,OutboundRejected,system,,,effects=0
+proposed,0,E1,InboundArrivalActual,client_gen,,,client_id=C1;sku_id=S_PEPSI_05;delivered_qty=94
+proposed,0,E2,InboundArrivalActual,client_gen,,,client_id=C1;sku_id=S_COLA_15;delivered_qty=83
+proposed,0,E3,InboundArrivalActual,client_gen,,,client_id=C1;sku_id=S_SNACK_X;delivered_qty=115

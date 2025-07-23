@@ -42,8 +42,10 @@ class Client:
     id: str
     name: str
     tier: str = "standard"
+    inbound_cfg: dict | None = None
     outbound_cfg: dict | None = None
     sku_mix: list[tuple[str, float]] | None = None
+    next_inbound_time: int = 0
     next_outbound_time: int = 0
 
 @dataclass

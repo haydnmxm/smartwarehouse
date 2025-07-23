@@ -46,8 +46,10 @@ def load_clients(path: str) -> dict[str, Client]:
         clients[c['id']] = Client(
             id=c['id'],
             name=c['name'],
-            outbound_cfg=c['outbound'],
+            inbound_cfg=c.get('inbound'),
+            outbound_cfg=c.get('outbound'),
             sku_mix=sku_mix,
+            next_inbound_time=0,
             next_outbound_time=0
         )
     return clients
