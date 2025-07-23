@@ -2,11 +2,28 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import List, Dict, Any
 import itertools, csv, os
+from enum import Enum, auto
 from .models import OrderLine
 from .travel import compute_travel_seconds
 from .putaway import choose_zone
 
 _event_id_counter = itertools.count(1)
+
+
+class EventType(Enum):
+    OUTBOUND_REQUEST = auto()
+    INBOUND_ARRIVAL_ACTUAL = auto()
+    EMERGENCY_ACTION = auto()
+    OUTBOUND_REJECTED = auto()
+    CONFIG_PATCH = auto()
+
+
+@dataclass
+class Event:
+    ts: int
+    source: str
+    type: EventType
+    payload: dict
 
 def next_event_id() -> str:
     return f"E{next(_event_id_counter)}"

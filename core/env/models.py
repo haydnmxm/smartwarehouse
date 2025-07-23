@@ -19,6 +19,7 @@ class Zone:
     y: int = 0
     w: int = 1
     h: int = 1
+    priority: int = 0
 
 @dataclass
 class Worker:

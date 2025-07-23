@@ -4,7 +4,8 @@ from . import wave_manager, dispatcher_heuristic, progress_model, metrics
 from . import client_scheduler
 from . import inbound_scheduler
 from .event_bus import EventBus
-from core.agents.emergency_agent.emergency_agent import process as emergency_process
+# from core.agents.emergency_agent.emergency_agent import process as emergency_process
+from core.agents.optimizer import process as optimizer_process
 import random
 
 class SimulationEngine:
@@ -46,8 +47,8 @@ class SimulationEngine:
         # 2. Валидация цикла 1
         self.event_bus.validate_cycle()
 
-        # 3. Emergency агент (реактивные сплиты больших заказов)
-        emergency_process(self.event_bus, self.state, self.cfg)
+        # # 3. Emergency агент (реактивные сплиты больших заказов)
+        # emergency_process(self.event_bus, self.state, self.cfg)
 
         # 4. Повторная валидация (реакции Emergency)
         self.event_bus.validate_cycle()
@@ -65,6 +66,7 @@ class SimulationEngine:
         
         # 7. Метрики
         metrics.collect_periodic(self.state, self.cfg)
+        optimizer_process(self.state, self.cfg)
 
         # 8. Время
         self.state.sim_time += self.tick_seconds

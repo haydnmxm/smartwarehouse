@@ -71,3 +71,42 @@ def flush_metrics(state: WorldState, out_path: str = "metrics_run.csv"):
             w.writeheader()
         for r in state.metrics.snapshots:
             w.writerow(r)
+
+def rollup(state: WorldState, window_s: int) -> dict:
+    """Возвращает агрегированные KPI за последние ``window_s`` сим‑секунд."""
+    start = max(0, state.sim_time - window_s)
+
+    done_lines = [l for l in state.order_lines.values()
+                  if l.status == "done" and (l.done_time or 0) >= start]
+
+    mean_cycle = 0.0
+    if done_lines:
+        mean_cycle = sum((l.done_time - l.created_time) for l in done_lines) / len(done_lines)
+
+    otif = 0.0
+    if done_lines:
+        on_time = [l for l in done_lines if l.done_time <= l.deadline_time]
+        otif = len(on_time) / len(done_lines)
+
+    dock_queue = sum(len(d.queue) for d in state.docks.values())
+
+    idle = sum(1 for w in state.workers.values() if w.state == "idle")
+    total_w = len(state.workers) or 1
+    util = (total_w - idle) / total_w
+
+    zone_fill_avg = 0.0
+    if state.zones:
+        zone_fill_avg = sum(
+            (z.current_qty / z.capacity) if z.capacity else 0.0
+            for z in state.zones.values()
+        ) / len(state.zones)
+
+    return {
+        "t": state.sim_time,
+        "window_s": window_s,
+        "mean_cycle_s": round(mean_cycle, 2),
+        "dock_queue": dock_queue,
+        "otif": round(otif, 3),
+        "worker_util": round(util, 3),
+        "zone_fill_avg": round(zone_fill_avg, 3)
+    }

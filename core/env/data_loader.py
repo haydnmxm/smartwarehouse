@@ -15,6 +15,7 @@ def load_layout(path: str) -> dict[str, Zone]:
             y=z.get('y', 0),
             w=z.get('w', 1),
             h=z.get('h', 1),
+            priority=z.get('priority', 0)
         )
     return zones
 

@@ -5,7 +5,9 @@ from .simulation_engine import SimulationEngine
 from .metrics import flush_metrics
 from .frame_exporter import snapshot, dump_run
 import random
+from dotenv import load_dotenv, find_dotenv
 
+load_dotenv(find_dotenv()) 
 frames = []
 
 def main():
