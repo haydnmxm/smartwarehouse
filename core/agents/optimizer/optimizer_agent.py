@@ -84,10 +84,10 @@ def call_optimizer(snapshot_path: str, cfg: Dict[str, Any]) -> Dict[str, Any] | 
             thread_id=thread.id,
             role="user",
             content="Analyse and propose next patch.",
-            attachments=[{
-                "file_id": file_id,
-                "tools": [{"type": "propose_patch"}],
-            }],
+                attachments=[{
+                    "file_id": file_id,
+                    "tools": [{ "type": "file_search" }],
+                }],
         )
     run = openai.beta.threads.runs.create(
         assistant_id=assistant_id,
@@ -135,8 +135,8 @@ def apply_patch(state: WorldState, cfg: Dict[str, Any], patch: Dict[str, Any]) -
 
 
 def log_opt_event(state: WorldState, before_snap: Dict[str, Any], patch: Dict[str, Any]) -> None:
-    csv_path = pathlib.Path("reports/optimizer/opt_events.csv")
-    md_path = pathlib.Path("reports/optimizer") / f"{datetime.date.today().isoformat()}.md"
+    csv_path = pathlib.Path(".results/optimizer/opt_events.csv")
+    md_path = pathlib.Path(".results/optimizer") / f"{datetime.date.today().isoformat()}.md"
     csv_path.parent.mkdir(parents=True, exist_ok=True)
     md_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -191,7 +191,7 @@ def process(state: WorldState, cfg: Dict[str, Any]) -> None:
         return
 
     snap = rollup(state, period_sec)
-    snap_path = pathlib.Path("reports/optimizer") / f"snapshot_{state.sim_time}.json"
+    snap_path = pathlib.Path(".results/optimizer") / f"snapshot_{state.sim_time}.json"
     snap_path.parent.mkdir(parents=True, exist_ok=True)
     with snap_path.open("w", encoding="utf-8") as f:
         json.dump(snap, f)
